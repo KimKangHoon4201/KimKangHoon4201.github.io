@@ -11,12 +11,16 @@ void sort_record();
 void change_disease();
 void load_file();
 void save_file();
+void check_bmi();
 //목적  create, read , update , delete , list의 기능을 만들자.
 int count = 0; //카운트를 세서 MAX_MEMBERS를 넘는지 확인 전역변수로 만들어야지 create와 delete에서 모두 활용
 int main(){
     int menu;
     while(1){
-        printf("\nMenu : 1.Create 2.Read 3.Update 4.Delete 5.List 6.Search 7.Sort 8.Change_disease 9.File Load, 10. File Save 0.Quit > ");
+        printf("\n \t ------------------------------------------- Menu -------------------------------------------\n");
+        printf ("\t 1.환자 정보 생성 \t 2.특정 환자 정보 읽기 \t 3.환자 정보 수정 \t 4.환자 정보 제거 \n");
+        printf ("\t 5.환자 리스트 \t 6.특정 환자 찾기 \t 7.환자 정보 정렬 \t 8.BMI 검사 \n");
+        printf ("\t 9.파일 읽기 \t 10. 파일 저장하기 \t 0.Quit > \n");
         scanf("%d", &menu);
         printf("\n");
         switch(menu){
@@ -42,7 +46,7 @@ int main(){
                 sort_record();
                 break;
             case 8: 
-                change_disease();
+                check_bmi();
                 break;
             case 9: 
                 load_file();
@@ -61,35 +65,35 @@ int main(){
 void create_record(){
     char name[20];  
     int old, height, weight, blood, gender, room_num;
-    char disease[20];
+    char disease[1000];
     count++;
-    printf("Enter a new member's info.\n");
-    printf("Name > ");
+    printf("환자의 정보를 입력해주세요\n");
+    printf("이름 > ");
     scanf("%s", name);
     if(p_search_by_name(name)) {
-        printf("Duplicated name!\n");
+        printf("이미 존재하는 환자의 이름입니다.\n");
         count--;
         return;
     }
-    printf("Old > ");
+    printf("나이 > ");
     scanf("%d", &old);
     
-    printf("Height > ");
+    printf("키 > ");
     scanf("%d", &height);
     
-    printf("Weight > ");
+    printf("몸무게 > ");
     scanf("%d", &weight);
 
-    printf("blood (1: O , 2: A , 3: B, 4: AB ) > ");
+    printf("혈액형 (1: O , 2: A , 3: B, 4: AB ) > ");
     scanf("%d", &blood);
 
-    printf("gender (1: 남성, 2: 여성) > ");
+    printf("성별 (1: 남성, 2: 여성) > ");
     scanf("%d", &gender);
 
-    printf("Disease Name > ");
+    printf("앓고있는 질병 ex) (감기,당뇨,코로나...,메르스/ 공백(x)) > ");
     scanf("%s", disease);
 
-    printf("Room number ");
+    printf("방 번호 ");
     scanf("%d", &room_num);
 
     if (count <= MAX_PATIENT)
@@ -98,7 +102,7 @@ void create_record(){
     }
     else
     {
-        printf("최대 5명을 넘겼습니다. 변경 또는 삭제를 해주세요.");
+        printf("최대 %d명을 넘겼습니다. 변경 또는 삭제를 해주세요.",MAX_PATIENT);
         count--;
         return;
     }
@@ -107,7 +111,7 @@ void create_record(){
 
 
 void list_record(){
-    printf("All records.\n");
+    printf("모든 정보를 가져왔습니다.\n");
     int size = p_count();
     patient_Record* records[MAX_PATIENT];
     p_get_all(records);
@@ -118,22 +122,22 @@ void list_record(){
 }
 void read_record()
 {   char name[20];
-    printf("You want read Name > ");
+    printf("찾는 사람의 이름을 입력해주세요. > ");
     scanf("%s", name);
     if (!(p_search_by_name(name)))
        {    
            printf("존재하지 않는 이름입니다.");
            return; //찾을 이름이 없다면 리턴
        }
-    printf("Member info.\n");
-    printf("Name : %s\n", p_getname(p_search_by_name(name)));
-    printf("Old : %d 세\n",p_getold(p_search_by_name(name)));
-    printf("Height : %d Cm\n",p_getheight(p_search_by_name(name)));
-    printf("Weight : %d Kg\n",p_getweight(p_search_by_name(name)));
-    printf("Blood : %s\n",p_getblood(p_search_by_name(name)));
-    printf("Gender : %s\n",p_getgender(p_search_by_name(name)));
-    printf("Disease Name : %s\n",p_getdisease(p_search_by_name(name)));
-    printf("Room number : %d 호\n",p_getroom(p_search_by_name(name)));
+    printf("환자의 정보입니다.\n");
+    printf("이름 : %s\n", p_getname(p_search_by_name(name)));
+    printf("나이 : %d 세\n",p_getold(p_search_by_name(name)));
+    printf("키 : %d Cm\n",p_getheight(p_search_by_name(name)));
+    printf("몸무게 : %d Kg\n",p_getweight(p_search_by_name(name)));
+    printf("혈액형 : %s\n",p_getblood(p_search_by_name(name)));
+    printf("성별 : %s\n",p_getgender(p_search_by_name(name)));
+    printf("앓고있는 질병 : %s\n",p_getdisease(p_search_by_name(name)));
+    printf("방번호 : %d 호\n",p_getroom(p_search_by_name(name)));
 }
 void update_record()
 {
@@ -141,32 +145,32 @@ void update_record()
     int old, height, weight, blood, gender, room_num;
     char disease[20];
 
-    printf("You want update Name > ");
+    printf("수정 할 사람의 이름을 입력해주세요 > ");
     scanf("%s", name);
     if (!(p_search_by_name(name)))
        {    
            printf("존재하지 않는 이름입니다.");
            return; //업데이트할 이름이 없다면 리턴
        } 
-    printf("Old > ");
+    printf("나이 > ");
     scanf("%d", &old);
     
-    printf("Height > ");
+    printf("키 > ");
     scanf("%d", &height);
     
-    printf("Weight > ");
+    printf("몸무게 > ");
     scanf("%d", &weight);
 
-    printf("blood (1: O , 2: A , 3: B, 4: AB ) > ");
+    printf("혈액형 (1: O , 2: A , 3: B, 4: AB ) > ");
     scanf("%d", &blood);
 
-    printf("gender (1: 남성, 2: 여성) > ");
+    printf("성별 (1: 남성, 2: 여성) > ");
     scanf("%d", &gender);
 
-    printf("Disease Name > ");
+    printf("앓고있는 질병 > ");
     scanf("%s", disease);
 
-    printf("Room number ");
+    printf("방 번호 ");
     scanf("%d", &room_num);
   
     p_update(p_search_by_name(name), old, height , weight, blood , gender , disease , room_num);
@@ -176,7 +180,7 @@ void delete_record()
 {
     count--;
     char name[20];
-    printf("You want delete Name > ");
+    printf("삭제 할 사람의 이름을 검색해주세요 > ");
     scanf("%s", name);
     if (!(p_search_by_name(name)))
        {    
@@ -189,36 +193,35 @@ void delete_record()
 }
 void search_record()
 {
-    int old, height, weight, blood, gender, room_num;
+    int old, blood, gender, room_num;
     char disease[20];
-    char name[20];
     int mode;
-    printf("Choose One: 1. Old 2.Blood 3. Gender 4. Disease 5.Room_num  0. Quit > ");
+    printf("어떤정보로 찾으시겠습니까? : 1.나이 2.혈액형 3.성별 4.질병 5.방번호 0. Quit > ");
     scanf("%d",&mode);
      switch(mode)
      {
         case 1:
-            printf("Search Old > ");
+            printf("찾을 나이 > ");
             scanf("%d",&old);
             p_search_Old(old);
             break;
         case 2:
-            printf("Search Blood (1: O , 2: A , 3: B, 4: AB ) > ");
+            printf("찾을 혈액형 (1: O , 2: A , 3: B, 4: AB ) > ");
             scanf("%d",&blood);
             p_search_Blood(blood);
             break;
         case 3:
-            printf("Search Gender (1: 남성 , 2: 여성) >");
+            printf("찾을 성별 (1: 남성 , 2: 여성) >");
             scanf("%d",&gender);
             p_search_Gender(gender);
             break;
         case 4:
-            printf("Search Disease > ");
+            printf("찾을 질병 > ");
             scanf("%s",disease);
             p_search_Disease(disease);
             break;
         case 5:
-            printf("Search room_num > ");
+            printf("찾을 방번호 > ");
             scanf("%d",&room_num);
              p_search_Room(room_num);
             break;
@@ -230,19 +233,9 @@ void search_record()
 void sort_record()
 {
     int mode = 0;
-    printf("What kind do you want? > 1. old 2. room 0. Quit > ");
+    printf("어떤 기준으로 정리되기를 원하십니까? > 1. 나이 2. 방 번호 0. Quit > ");
     scanf("%d",&mode);
     p_sort_list(mode);
-}
-void change_disease()
-{
-    char disease[20];
-    char new_disease[20];
-    printf("Find Disease Name > ");
-    scanf("%s", disease);
-    printf("Change Disease  Name > ");
-    scanf("%s", new_disease);
-    p_update_Disease(disease, new_disease);
 }
 void load_file()
 {
@@ -252,7 +245,7 @@ void load_file()
     scanf ("%d",&mode);
     if (mode == 1)
     {
-        printf("load file name > ");
+        printf("읽을 파일의 이름을 입력해주세요 > ");
         scanf("%s", file_name);
         p_load_file(file_name);
     }
@@ -265,8 +258,39 @@ void load_file()
 void save_file()
 {
     char file_name[20];
-    printf("save file name > ");
+    printf("저장 할 파일의 이름을 입력해주세요 > ");
     scanf("%s", file_name);
     p_save_file(file_name);
-    printf("Saved");
+    printf("저장되었습니다.");
+}
+
+void check_bmi()
+{
+    int size = p_count();
+    patient_Record* records[MAX_PATIENT];
+    p_get_all(records);
+    float bmi; int cm; int kg;
+    for(int i=0; i<size; i++){
+        patient_Record* p = records[i];
+        cm = p->height; kg = p->weight;
+        bmi = kg / ((cm /100.0) * (cm/ 100.0));
+        printf("%s / 키 : %d CM / 몸무게 : %d KG \n", p->name ,cm,kg);
+        if (bmi >= 30)
+        {
+            printf ("BMI : %.1f / BMI 30 이상 : 비만 \n",bmi);
+        }
+        else if(bmi >= 25)
+        {
+            printf ("BMI : %.1f / BMI 30 미만  25이상 : 과체중 \n",bmi);
+        }
+        else if(bmi >= 18.5)
+        {
+            printf ("BMI : %.1f / 25미만 18.5이상 : 정상 \n",bmi);
+        }
+        else
+        {
+            printf ("BMI : %.1f/ BMI 18.5미만 : 저체중 \n",bmi);
+        }
+        //printf("%d. %s\n", i+1, p_to_string(p));
+    }
 }

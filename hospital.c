@@ -26,15 +26,9 @@ int p_count(){
 void p_create (char*p_n, int p_old , int p_height , int p_weight, int p_blood , int p_gender , char*p_disease , int p_room)
 {
 #ifdef DEBUG
-    #ifdef NDEBUG
-    {
-
-    }
-    else
     {
       printf("Debug : create\n");     
     }
-    #endif
 #endif      
     int index = p_first_available();
     patient[index] = (patient_Record*)malloc(sizeof(patient_Record));
@@ -92,15 +86,9 @@ patient_Record* p_search_by_name(char* n){
 void p_search_Old(int search_old)
 {
 #ifdef DEBUG
-    #ifdef NDEBUG
-    {
-
-    }
-    else
     {
       printf("Debug : search by old\n");    
     }
-    #endif
 #endif 
     int i;
     int check = 0;
@@ -121,15 +109,9 @@ void p_search_Old(int search_old)
 void p_search_Blood(int search_blood)
 {
 #ifdef DEBUG
-    #ifdef NDEBUG
-    {
-
-    }
-    else
     {
       printf("Debug : search by blood\n");   
     }
-    #endif
 #endif    
     int i;
     int check = 0;
@@ -150,15 +132,9 @@ void p_search_Blood(int search_blood)
 void p_search_Gender(int search_gender)
 {
 #ifdef DEBUG
-    #ifdef NDEBUG
-    {
-
-    }
-    else
     {
       printf("Debug : search by gender\n");
     }
-    #endif
 #endif 
     int i;
     int check = 0;
@@ -181,7 +157,7 @@ void p_search_Disease(char* search_disease)
     int check = 0;
     for(i=0; i<_count; i++)
     {
-        if(patient[i] && strcmp(patient[i]->disease, search_disease)==0)
+        if(patient[i] && strstr(patient[i]->disease, search_disease)!=NULL)
         {
             printf("%s / %s \n",patient[i]->name , patient[i]-> disease);
             check = check +1;
@@ -214,15 +190,9 @@ void p_search_Room(int search_room)
 void p_update_Disease(char* original_disease, char* change_disease)
 {
 #ifdef DEBUG
-    #ifdef NDEBUG
-    {
-
-    }
-    else
     {
       printf("Debug : Update\n");
     }
-    #endif
 #endif 
     int i;
     int check = 0;
@@ -255,15 +225,9 @@ void p_update_Disease(char* original_disease, char* change_disease)
 void p_sort_list(int list_mode)
 {
 #ifdef DEBUG
-    #ifdef NDEBUG
-    {
-
-    }
-    else
     {
       printf("Debug : Sorted\n");
     }
-    #endif
 #endif 
     patient_Record*temp;
     switch(list_mode)
@@ -307,15 +271,9 @@ void p_sort_list(int list_mode)
 
 void p_update (patient_Record* p, int p_old , int p_height , int p_weight, int p_blood , int p_gender , char*p_disease , int p_room){
 #ifdef DEBUG
-    #ifdef NDEBUG
-    {
-
-    }
-    else
     {
       printf("Debug : Update\n");
     }
-    #endif
 #endif 
     p->old = p_old;
     p->height = p_height;
@@ -328,15 +286,9 @@ void p_update (patient_Record* p, int p_old , int p_height , int p_weight, int p
 
 void p_delete(patient_Record* p){
 #ifdef DEBUG
-    #ifdef NDEBUG
-    {
-
-    }
-    else
     {
       printf("Debug : Delete\n");
     }
-    #endif
 #endif
     int i, index;
     for(i=0; i<MAX_PATIENT; i++)
@@ -400,15 +352,9 @@ int p_getroom(patient_Record* p)
 void p_save_file(char*p_file)
 {
 #ifdef DEBUG
-    #ifdef NDEBUG
-    {
-
-    }
-    else
     {
       printf("Debug : Saved\n");
     }
-    #endif
 #endif
   FILE*myfile;
   myfile = fopen(p_file,"w");
@@ -424,15 +370,9 @@ void p_save_file(char*p_file)
 void p_load_file(char* p_file)
 {
 #ifdef DEBUG
-    #ifdef NDEBUG
-    {
-
-    }
-    else
     {
       printf("Debug : Loaded\n");
     }
-    #endif
 #endif
     char name[20];  int old;  int height; int weight;int blood; int gender;char disease[20]; int room_num;
     char sentence[100];
@@ -529,15 +469,9 @@ void p_load_file(char* p_file)
 void p_all_delete(){
 
 #ifdef DEBUG
-    #ifdef NDEBUG
-    {
-
-    }
-    else
     {
       printf("Debug : All_deleted\n");      
     }
-    #endif
 #endif 
     int i;
     for(i=0; i<MAX_PATIENT; i++)

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_PATIENT 5      // 저장할 수 있는 회원 레코드 최대 갯수
+#define MAX_PATIENT 100      // 저장할 수 있는 회원 레코드 최대 갯수
 
 // 회원 정보 레코드의 데이터 타입을 정의함
 typedef struct st_patient{
@@ -45,6 +45,7 @@ void p_search_Disease(char* search_old);
 void p_search_Room(int search_room);
 void p_update_Disease(char* original_disease, char* change_disease);
 void p_sort_list(int list_mode);
+
 void p_load_file(char* p_file);
 void p_save_file(char* p_file);
 void p_all_delete();
